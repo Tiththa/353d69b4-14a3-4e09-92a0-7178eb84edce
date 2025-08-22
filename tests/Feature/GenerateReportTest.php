@@ -12,6 +12,7 @@ test('general validation', function () {
         ->assertFailed();
 });
 
+
 test('diagnostic report shows latest score and breakdown', function () {
     $this->artisan(GenerateReport::class)
         ->expectsQuestion('Enter Student ID: ', 'student1')
