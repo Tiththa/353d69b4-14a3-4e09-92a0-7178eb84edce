@@ -1,3 +1,37 @@
+# Prerequisites
+
+- Composer 2
+- Xampp/Wamp ([Xampp](https://www.apachefriends.org/download.html) or Laragon
+- PhpStorm or equivalent IDE (PhpStorm Preferred)
+
+
+## Installation
+
+- Ensure the extracted folder contains the files as you open the extracted folder
+- Ensure Composer is installed in your local environment
+- Move the extracted folder to `htdocs` if using XAMPP or `www` if using WAMP/Laragon respectively and rename the folder (Eg: LFilamentTest)
+- `cd` or navigate to the extracted folder in `/laragon/www/353d69b4-14a3-4e09-92a0-7178eb84edce`
+- Open up a terminal or git bash and follow the below-mentioned commands
+
+Install the packages to setup the application
+```bash
+composer install
+```
+
+All system configurations are managed by a file called `.env`, a file contains all the Environment Variables used in the system.
+
+After completing the above steps and configuring, DO NOT FORGET to restart your server.
+
+```bash
+php artisan optimize
+```
+
+Open up a terminal and enter  
+```bash
+php artisan app:report
+```
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

@@ -5,10 +5,30 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\info;
 
-test('generates a summary report', function () {
+test('diagnostic report shows latest score and breakdown', function () {
     $this->artisan(GenerateReport::class)
-        ->expectsQuestion('Enter Student ID: ', 'student1')      // Provide the student ID
-        ->expectsChoice('Report to generate:', 'Diagnostic', ['Diagnostic', 'Progress', 'Feedback']) // Provide report type
-        ->expectsOutputToContain('Tony Stark recently completed ')         // Match part of your info output
+        ->expectsQuestion('Enter Student ID: ', 'student1')
+        ->expectsChoice('Report to generate:', 'Diagnostic', [
+        'Diagnostic', 'Progress', 'Feedback'
+        ])
+        ->expectsOutputToContain('Tony Stark recently completed ')
+        ->expectsOutputToContain('He got 15 out of 16. Details by strand given below:')
+        ->expectsOutputToContain('Number and Algebra: 5 out of 5 correct')
+        ->expectsOutputToContain('Measurement and Geometry: 7 out of 7 correct')
+        ->expectsOutputToContain('Statistics and Probability: 3 out of 4 correct')
+        ->assertExitCode(0);
+});
+
+test('progress report shows attempts and score differences', function () {
+    $this->artisan(GenerateReport::class)
+        ->expectsQuestion('Enter Student ID: ', 'student1')
+        ->expectsChoice('Report to generate:', 'Progress', [
+            'Diagnostic', 'Progress', 'Feedback'
+        ])
+        ->expectsOutputToContain('Tony Stark has completed Numeracy assessment 3 times in total. Date and raw score given below: ')
+        ->expectsOutputToContain('Date: 16th December 2021 10:46:00 AM, Raw Score: 15 out of 16')
+        ->expectsOutputToContain('Date: 16th December 2020 10:46:00 AM, Raw Score: 10 out of 16')
+        ->expectsOutputToContain('Date: 16th December 2019 10:46:00 AM, Raw Score: 6 out of 16')
+        ->expectsOutputToContain('Tony Stark got 9 more correct in the recent completed assessment than the oldest')
         ->assertExitCode(0);
 });
