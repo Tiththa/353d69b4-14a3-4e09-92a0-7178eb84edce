@@ -4,12 +4,14 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
+
 class GenerateReport extends Command
 {
     /**
@@ -129,22 +131,21 @@ class GenerateReport extends Command
                         $is_correct = $response['response'] === ($question['config']['key'] ?? null);
 
                         return [
-                            'strand'   => $question['strand'] ?? 'Unknown',
-                            'isCorrect'=> $is_correct,
+                            'strand' => $question['strand'] ?? 'Unknown',
+                            'isCorrect' => $is_correct,
                         ];
                     })
                     ->groupBy('strand')
                     ->map(function ($items) {
-                        $total   = $items->count();
+                        $total = $items->count();
                         $correct = $items->where('isCorrect', true)->count();
 
                         return [
                             'correct' => $correct,
-                            'total'   => $total,
+                            'total' => $total,
                             'summary' => "{$correct} out of {$total} correct",
                         ];
                     });
-
 
 
                 foreach ($breakdown as $strand => $stats) {
@@ -260,7 +261,7 @@ class GenerateReport extends Command
                         if (!$is_correct) {
 
                             $correct_option = collect($question['config']['options'])->firstWhere('id', $correct_answer);
-                            $given_option   = collect($question['config']['options'])->firstWhere('id', $response['response']);
+                            $given_option = collect($question['config']['options'])->firstWhere('id', $response['response']);
 
                             info("Question: " . $question['stem']);
                             info("Your answer: {$given_option['id']} with value {$given_option['value']}");
