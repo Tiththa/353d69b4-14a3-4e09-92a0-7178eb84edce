@@ -25,10 +25,24 @@ test('progress report shows attempts and score differences', function () {
         ->expectsChoice('Report to generate:', 'Progress', [
             'Diagnostic', 'Progress', 'Feedback'
         ])
-        ->expectsOutputToContain('Tony Stark has completed Numeracy assessment 3 times in total. Date and raw score given below: ')
+        ->expectsOutputToContain('Tony Stark has completed Numeracy assessment 3 times in total. ')
         ->expectsOutputToContain('Date: 16th December 2021 10:46:00 AM, Raw Score: 15 out of 16')
         ->expectsOutputToContain('Date: 16th December 2020 10:46:00 AM, Raw Score: 10 out of 16')
         ->expectsOutputToContain('Date: 16th December 2019 10:46:00 AM, Raw Score: 6 out of 16')
         ->expectsOutputToContain('Tony Stark got 9 more correct in the recent completed assessment than the oldest')
+        ->assertExitCode(0);
+});
+
+test('feedback report shows wrong answers and hints', function () {
+    $this->artisan(GenerateReport::class)
+        ->expectsQuestion('Enter Student ID: ', 'student1')
+        ->expectsChoice('Report to generate:', 'Feedback', [
+            'Diagnostic', 'Progress', 'Feedback'
+        ])
+        ->expectsOutputToContain('Tony Stark recently completed Numeracy assessment')
+        ->expectsOutputToContain('He got 15 questions right out of 16. Feedback for wrong answers given below:')
+        ->expectsOutputToContain("Question: What is the 'median' of the following group of numbers 5, 21, 7, 18, 9?")
+        ->expectsOutputToContain('Your answer: option1 with value 7')
+        ->expectsOutputToContain('Right answer: option2 with value 9')
         ->assertExitCode(0);
 });
