@@ -5,11 +5,18 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\info;
 
+test('general validation', function () {
+    $this->artisan(GenerateReport::class)
+        ->expectsQuestion('Enter Student ID: ', 'student5')
+        ->expectsOutputToContain( 'The selected student id is invalid')
+        ->assertFailed();
+});
+
 test('diagnostic report shows latest score and breakdown', function () {
     $this->artisan(GenerateReport::class)
         ->expectsQuestion('Enter Student ID: ', 'student1')
         ->expectsChoice('Report to generate:', 'Diagnostic', [
-        'Diagnostic', 'Progress', 'Feedback'
+            'Diagnostic', 'Progress', 'Feedback'
         ])
         ->expectsOutputToContain('Tony Stark recently completed ')
         ->expectsOutputToContain('He got 15 out of 16. Details by strand given below:')
